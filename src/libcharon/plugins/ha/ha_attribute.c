@@ -159,13 +159,13 @@ static pool_t* get_pool(private_ha_attribute_t *this, char *name)
 }
 
 /**
- * Check if we are responsible for a bit in our bitmask
+ * Check if we are responsible for an offset in our bitmask
  */
-static bool responsible_for(private_ha_attribute_t *this, int bit)
+static bool responsible_for(private_ha_attribute_t *this, int offset)
 {
 	u_int segment;
 
-	segment = this->kernel->get_segment_int(this->kernel, bit);
+	segment = offset % this->segments->count(this->segments) + 1;
 	return this->segments->is_active(this->segments, segment);
 }
 
