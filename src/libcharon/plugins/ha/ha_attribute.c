@@ -175,7 +175,7 @@ METHOD(attribute_provider_t, acquire_address, host_t*,
 {
 	enumerator_t *enumerator;
 	pool_t *pool = NULL;
-	int offset = -1, byte, bit;
+	int offset = -1, tmp_offset, byte, bit;
 	host_t *address;
 	char *name;
 
@@ -199,10 +199,11 @@ METHOD(attribute_provider_t, acquire_address, host_t*,
 			{
 				for (bit = 0; bit < 8; bit++)
 				{
+					tmp_offset = byte * 8 + bit;
 					if (!(pool->mask[byte] & 1 << bit) &&
-						responsible_for(this, bit))
+						responsible_for(this, tmp_offset))
 					{
-						offset = byte * 8 + bit;
+						offset = tmp_offset;
 						pool->mask[byte] |= 1 << bit;
 						break;
 					}
